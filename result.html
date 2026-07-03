@@ -1,0 +1,188 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="color-scheme" content="dark">
+  <title>SuperAnalyst – Output</title>
+  <style>
+    :root{
+      --bg:#070a10;
+      --panel:#0f1720;
+      --panel2:#0b1220;
+      --text:#e6edf3;
+      --muted:#9aa6b2;
+      --border:#1f2a37;
+      --shadow:0 10px 30px rgba(0,0,0,.40);
+
+      --good:#22c55e;
+      --warn:#f59e0b;
+      --bad:#fb7185;
+      --info:#60a5fa;
+      --violet:#a78bfa;
+      --cyan:#22d3ee;
+    }
+
+    *{box-sizing:border-box;}
+    body{
+      margin:0;padding:14px;
+      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background:
+        radial-gradient(1200px 600px at 20% -10%, rgba(96,165,250,.22), transparent 60%),
+        radial-gradient(900px 500px at 90% 0%, rgba(167,139,250,.18), transparent 60%),
+        radial-gradient(900px 600px at 50% 120%, rgba(34,211,238,.10), transparent 60%),
+        var(--bg);
+      color:var(--text);
+    }
+
+    .wrap{display:flex;flex-direction:column;gap:12px;max-width:1040px;margin:0 auto;}
+
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      padding:12px 14px;border:1px solid var(--border);
+      border-radius:16px;background:rgba(15,23,32,.92);
+      box-shadow:var(--shadow);backdrop-filter: blur(10px);
+    }
+    .title{display:flex;flex-direction:column;gap:4px;min-width:0;}
+    .titleRow{display:flex;align-items:center;gap:10px;min-width:0;}
+    .title h1{margin:0;font-size:14px;font-weight:800;letter-spacing:.2px;}
+    .meta{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:680px;}
+
+    .dot{
+      width:10px;height:10px;border-radius:999px;
+      background:var(--good);
+      box-shadow:0 0 0 4px rgba(34,197,94,.16);
+      flex:0 0 auto;
+    }
+    .dot.warn{background:var(--warn);box-shadow:0 0 0 4px rgba(245,158,11,.16);}
+    .dot.bad{background:var(--bad);box-shadow:0 0 0 4px rgba(251,113,133,.16);}
+
+    .btns{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+    button{
+      padding:8px 12px;border-radius:12px;border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(26,38,53,.92), rgba(16,24,34,.92));
+      color:#fff;cursor:pointer;font-weight:650;font-size:12px;
+    }
+    button:hover{filter:brightness(1.06);}
+    button.danger{
+      border-color:rgba(251,113,133,.45);
+      background:linear-gradient(180deg, rgba(251,113,133,.18), rgba(16,24,34,.92));
+    }
+
+    .grid{display:grid;grid-template-columns:1fr;gap:12px;}
+    @media (min-width:980px){ .grid{grid-template-columns:1fr 1.35fr;} }
+
+    .panel{
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:rgba(15,23,32,.92);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .panel header{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:10px 12px;border-bottom:1px solid var(--border);
+      background:rgba(11,18,32,.55);
+    }
+    .panel header h2{margin:0;font-size:12px;font-weight:850;letter-spacing:.35px;text-transform:uppercase;color:#cfe3ff;}
+    .panel header .tools{display:flex;gap:8px;align-items:center;}
+
+    textarea{
+      width:100%;margin:0;padding:12px;border:0;outline:0;background:transparent;color:var(--text);
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+      font-size:12px;line-height:1.45;white-space:pre-wrap;word-break:break-word;
+      min-height:140px;resize:vertical;
+    }
+
+    /* output renderer */
+    .out{
+      padding:12px;
+      background:transparent;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+      font-size:12px;line-height:1.45;
+    }
+    .cards{display:flex;flex-direction:column;gap:10px;}
+    .card{
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:rgba(11,18,32,.55);
+      overflow:hidden;
+    }
+    .cardHead{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:10px 12px;border-bottom:1px solid rgba(31,42,55,.7);
+      background:linear-gradient(180deg, rgba(15,23,32,.75), rgba(11,18,32,.35));
+    }
+    .cardTitle{
+      display:flex;align-items:center;gap:10px;min-width:0;
+      font-weight:850;letter-spacing:.25px;
+    }
+    .badge{
+      font-size:11px;font-weight:850;padding:4px 8px;border-radius:999px;
+      border:1px solid rgba(31,42,55,.9);color:#dbeafe;background:rgba(96,165,250,.10);
+      flex:0 0 auto;
+    }
+    .badge.good{color:#dcfce7;background:rgba(34,197,94,.10);border-color:rgba(34,197,94,.35);}
+    .badge.warn{color:#fff7ed;background:rgba(245,158,11,.10);border-color:rgba(245,158,11,.35);}
+    .badge.bad{color:#ffe4e6;background:rgba(251,113,133,.12);border-color:rgba(251,113,133,.35);}
+    .badge.violet{color:#f5f3ff;background:rgba(167,139,250,.12);border-color:rgba(167,139,250,.35);}
+    .badge.cyan{color:#cffafe;background:rgba(34,211,238,.10);border-color:rgba(34,211,238,.35);}
+
+    .cardBody{
+      padding:10px 12px;
+      white-space:pre-wrap;
+      word-break:break-word;
+      overflow:auto;
+      max-height:520px;
+    }
+
+    /* token highlighting */
+    .tok-ip{color:var(--cyan);}
+    .tok-url{color:var(--info);text-decoration:underline dotted rgba(96,165,250,.35);}
+    .tok-dom{color:var(--violet);}
+    .tok-hash{color:#fca5a5;}
+    .tok-key{color:#c7d2fe;}
+    .tok-err{color:var(--bad);font-weight:800;}
+    .tok-ok{color:var(--good);font-weight:800;}
+    .tok-warn{color:var(--warn);font-weight:800;}
+    .muted{color:var(--muted);}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="title">
+        <div class="titleRow">
+          <div class="dot" id="statusDot"></div>
+          <h1>SuperAnalyst</h1>
+        </div>
+        <div class="meta" id="metaText">Output</div>
+      </div>
+      <div class="btns">
+        <button id="copyInput">Copy Input</button>
+        <button id="copyOutput">Copy Output</button>
+        <button class="danger" id="closeBtn">Close</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <header>
+          <h2>Input</h2>
+          <div class="tools"><span class="muted" id="kindTag"></span></div>
+        </header>
+        <textarea id="inputBox" spellcheck="false" readonly></textarea>
+      </div>
+
+      <div class="panel">
+        <header>
+          <h2>Output</h2>
+          <div class="tools"><span class="muted" id="sevTag"></span></div>
+        </header>
+        <div id="outputBox" class="out"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="result.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "SuperAnalyst",
+  "version": "1.6.1",
+  "description": "SOC helper: AI command analysis (local API), VT threat lookup (IP/URL/domain/hash/file), AbuseIPDB/GreyNoise (IP), Base64 decode, SOC case generation with the same intel lookup.",
+  "permissions": ["contextMenus", "storage"],
+  "host_permissions": [
+    "http://127.0.0.1:6969/*",
+    "https://www.virustotal.com/*",
+    "https://api.abuseipdb.com/*",
+    "https://api.greynoise.io/*"
+  ],
+  "background": {
+    "service_worker": "service_worker.js"
+  },
+  "options_page": "options.html",
+  "action": {
+    "default_title": "SuperAnalyst"
+  }
+}

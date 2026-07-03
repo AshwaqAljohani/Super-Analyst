@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="color-scheme" content="dark">
+  <title>SuperAnalyst – Settings</title>
+  <style>
+    body{background:#0b0f14;color:#e6edf3;font-family:Segoe UI,Roboto,Arial;margin:0;padding:20px;}
+    .card{background:#0f1720;border:1px solid #1f2a37;padding:18px;border-radius:12px;max-width:720px;margin:auto;}
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+    label{display:block;margin-top:10px;margin-bottom:4px;color:#cbd5e1;}
+    input[type="password"],input[type="text"]{width:100%;padding:10px;margin:6px 0;border-radius:10px;border:1px solid #1f2a37;background:#0002;color:#fff;}
+    input[type="file"]{margin-top:6px;}
+    button{padding:8px 12px;border-radius:10px;border:1px solid #1f2a37;background:#1a2635;color:#fff;cursor:pointer;}
+    button:hover{filter:brightness(1.05);}
+    .muted{color:#9aa6b2;font-size:12px;margin-top:6px;}
+    .status{min-height:18px;color:#9aa6b2;font-size:13px;margin:6px 0;}
+    pre{white-space:pre-wrap;background:#0b1220;border:1px solid #1f2a37;border-radius:12px;padding:12px;margin-top:10px;}
+    hr{border:none;border-top:1px solid #1f2a37;margin:16px 0;}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Threat-Intel Keys</h2>
+
+    <label>VirusTotal API Key</label>
+    <input id="vtKey" type="password" placeholder="VT v3 API key">
+    <div class="row">
+      <button id="saveVt">Save</button>
+      <button id="clearVt">Clear</button>
+      <button id="toggleVt">Show</button>
+    </div>
+    <p id="vtStatus" class="status"></p>
+
+    <label>AbuseIPDB Key</label>
+    <input id="abuseKey" type="password" placeholder="AbuseIPDB key (optional)">
+    <div class="row">
+      <button id="saveAbuse">Save</button>
+      <button id="clearAbuse">Clear</button>
+      <button id="toggleAbuse">Show</button>
+    </div>
+    <p id="abuseStatus" class="status"></p>
+
+    <label>GreyNoise Key</label>
+    <input id="greyKey" type="password" placeholder="GreyNoise community key (optional)">
+    <div class="row">
+      <button id="saveGrey">Save</button>
+      <button id="clearGrey">Clear</button>
+      <button id="toggleGrey">Show</button>
+    </div>
+    <p id="greyStatus" class="status"></p>
+
+    <hr>
+
+    <h3>VirusTotal File Lookup (SHA-256)</h3>
+    <div class="muted">Pick a file. The extension hashes it locally (SHA-256) then queries VT /files/{sha256}.</div>
+    <input id="filePick" type="file">
+    <div class="row" style="margin-top:10px;">
+      <button id="checkFile">Hash + Lookup in VT</button>
+      <button id="openResult">Open Last Result Window</button>
+    </div>
+    <p id="fileStatus" class="status"></p>
+    <pre id="fileOut"></pre>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
